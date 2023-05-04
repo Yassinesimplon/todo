@@ -11,13 +11,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/todos', { useNewUrlParser: true });
-const connection = mongoose.connection;
-
-// Once the connection is established, callback
-connection.once('open', () => {
-    console.log("MongoDB database connection established successfully");
-});
 
 todoRoutes.route('/').get( (req,res) => {
     Todo.find((err, todos) => {
@@ -68,6 +61,9 @@ todoRoutes.route('/update/:id').post((req,res) => {
 
 app.use('/todos', todoRoutes);
 
-app.listen( PORT, () => {
-    console.log("Server is running on port " + PORT);
-});
+mongoose.connect('mongodb+srv://yassinehasnaouifabrikademy:yassine@cluster0.udtwdab.mongodb.net/todo?retryWrites=true&w=majority').then(() => {
+    app.listen( PORT, () => {
+        console.log("Server is running on port " + PORT);
+    });
+    
+}).catch(err => console.error(err))
